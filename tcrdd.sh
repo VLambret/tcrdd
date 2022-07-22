@@ -126,6 +126,7 @@ CMD="$@"
 if [ -z "$CMD" ]
 then
     usage 1>&2
+    exit 42
 fi
 
 git add .

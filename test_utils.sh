@@ -4,6 +4,7 @@ runInto() {
     cd $1
     shift
     "$@"
+    lastExitCode=$?
     cd $currentDirectory
 }
 
@@ -26,7 +27,7 @@ createRepositories() {
     runAsAlice git add tcrdd.sh
     runAsAlice git commit -m "Add tcrdd script" > /dev/null
     runAsAlice git push > /dev/null 2>&1
-    
+
     git clone ${bareRepository} ${bobClone}
     runAsBob git config user.name Bob
     runAsBob git config user.email bob@tcr.com
