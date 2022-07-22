@@ -356,6 +356,7 @@ oneTimeSetUp() {
     aliceClone="${SHUNIT_TMPDIR}/alice"
     bobClone="${SHUNIT_TMPDIR}/bob"
     stdout="${SHUNIT_TMPDIR}/stdout"
+    stderr="${SHUNIT_TMPDIR}/stderr"
 }
 
 setUp() {
@@ -364,7 +365,7 @@ setUp() {
 
 tearDown() {
     deleteRepositories > /dev/null 2>&1
-    rm -f $stdout
+    rm -f $stdout $stderr
 }
 
 . ./shunit2/shunit2
