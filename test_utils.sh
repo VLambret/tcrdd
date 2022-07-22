@@ -4,7 +4,7 @@ runInto() {
     cd $1
     shift
     "$@"
-    lastExitCode=$?
+    lastExitStatus=$?
     cd $currentDirectory
 }
 

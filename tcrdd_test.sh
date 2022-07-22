@@ -21,13 +21,13 @@ should_print_usage_on_stderr_when_given() {
     echo content > ${aliceClone}/aFile
     startStatus=$(runAsAlice git status -s)
     runAsAlice ./tcrdd.sh "${arguments[@]}" 2> $stderr
-    exitStatus=$lastExitCode
+    exitStatus=$lastExitStatus
     status=$(runAsAlice git status -s)
     currentHash=$(runAsAlice getHeadHash)
     stderrContent=$(cat $stderr)
     assertEquals 'Alice s code should not be commited' "$headHash" "$currentHash"
     assertEquals "Nothing should have changed for git" "$startStatus" "$status"
-    assertNotEquals "exit status should be an error" "0" "$exitStatus"
+    assertNotEquals "exit status should be an error" "0" "$lastExitStatus"
     assertContains "Usage should be displayed" "$stderrContent" "Usage :"
 }
 
