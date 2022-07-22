@@ -20,13 +20,13 @@ should_print_usage_on_stderr_when_given() {
     headHash=$(runAsAlice getHeadHash)
     echo content > ${aliceClone}/aFile
     startStatus=$(runAsAlice git status -s)
-    runAsAlice ./tcrdd.sh "${arguments[@]}" > $stdout
+    runAsAlice ./tcrdd.sh "${arguments[@]}" 2> $stderr
     status=$(runAsAlice git status -s)
     currentHash=$(runAsAlice getHeadHash)
-    stdoutContent=$(cat $stdout)
+    stderrContent=$(cat $stderr)
     assertEquals 'Alice s code should not be commited' "$headHash" "$currentHash"
     assertEquals "Nothing should have changed for git" "$startStatus" "$status"
-    assertContains "Usage should be displayed" "$stdoutContent" "Usage :"
+    assertContains "Usage should be displayed" "$stderrContent" "Usage :"
 }
 
 test_print_usage_when_given_short_option() {

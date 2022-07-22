@@ -125,7 +125,7 @@ done
 CMD="$@"
 if [ -z "$CMD" ]
 then
-    usage
+    usage 1>&2
 fi
 
 git add .
