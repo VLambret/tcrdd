@@ -15,6 +15,20 @@ should_print_usage_when_given() {
     assertContains "Usage should be displayed" "$stdoutContent" "Usage :"
 }
 
+should_print_usage_on_stderr_when_given() {
+    arguments=("$@")
+    headHash=$(runAsAlice getHeadHash)
+    echo content > ${aliceClone}/aFile
+    startStatus=$(runAsAlice git status -s)
+    runAsAlice ./tcrdd.sh "${arguments[@]}" > $stdout
+    status=$(runAsAlice git status -s)
+    currentHash=$(runAsAlice getHeadHash)
+    stdoutContent=$(cat $stdout)
+    assertEquals 'Alice s code should not be commited' "$headHash" "$currentHash"
+    assertEquals "Nothing should have changed for git" "$startStatus" "$status"
+    assertContains "Usage should be displayed" "$stdoutContent" "Usage :"
+}
+
 test_print_usage_when_given_short_option() {
     and_any_command=true
     should_print_usage_when_given -h $and_any_command
@@ -27,7 +41,7 @@ test_print_usage_when_given_long_option() {
 
 test_print_usage_when_given_no_test_command() {
     no_test_command=
-    should_print_usage_when_given $no_test_command
+    should_print_usage_on_stderr_when_given $no_test_command
 }
 
 
@@ -174,7 +188,7 @@ should_amend_commit_and_not_push_when_given() {
     currentHash=$(runAsAlice getHeadHash)
     originHash=$(runAsAlice getOriginHeadHash)
     assertNull 'Everything should be committed by alice' "$status"
-    assertNotEquals 'Alice s should not be pushed' "$originHash" "$currentHash" 
+    assertNotEquals 'Alice s should not be pushed' "$originHash" "$currentHash"
     assertEquals 'Only one commit should exist' 1 "${nbCommits}"
 }
 
@@ -270,7 +284,7 @@ test_commit_with_message_when_assumed_red_and_tests_fail__long_option() {
 should_pull_when_given() {
     arguments=("$@")
     headHash=$(runAsAlice getHeadHash)
-    
+
     echo content > ${bobClone}/aFile
     runAsBob git add . > /dev/null 2>&1
     runAsBob git commit -m "bob commit" > /dev/null 2>&1
