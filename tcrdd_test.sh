@@ -76,7 +76,7 @@ should_revert_when_given() {
     arguments=("$@")
     headHash=$(runAsAlice getHeadHash)
     echo content > ${aliceClone}/aFile
-    runAsAlice ./tcrdd.sh "${arguments[@]}" > /dev/null 2>&1
+    runAsAlice ./tcrdd.sh "${arguments[@]}" > ${stdout} 2>&1
     status=$(runAsAlice git status -s)
     currentHash=$(runAsAlice getHeadHash)
     assertNull 'Alice s code is not reverted' "$status"
