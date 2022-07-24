@@ -77,11 +77,13 @@ should_revert_when_given() {
     headHash=$(runAsAlice getHeadHash)
     echo content > ${aliceClone}/aFile
     runAsAlice ./tcrdd.sh "${arguments[@]}" > ${stdout} 2>&1
+    stdoutContent=$(cat $stdout)
     status=$(runAsAlice git status -s)
     currentHash=$(runAsAlice getHeadHash)
     assertNull 'Alice s code is not reverted' "$status"
     assertEquals 'Alice head should be the same as before' "$headHash" "$currentHash"
     assertFalse 'Created file should be removed' '[ -f ${aliceClone}/aFile ]'
+    assertContains "REVERTING tag is printed" "$stdoutContent" "REVERTING"
 }
 
 test_revert_when_assumed_red_and_tests_pass__short_option() {
