@@ -49,7 +49,7 @@ function lastCommitRed(){
 # revert to the last version that was committed
 function revert() {
     RED='\033[0;31m'
-    No_COLOR='\033[0;0m'
+    NO_COLOR='\033[0m'
     echo -e "${RED}REVERTING${NO_COLOR}"
     git reset --hard
 }
